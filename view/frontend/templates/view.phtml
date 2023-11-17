@@ -1,0 +1,120 @@
+<?php
+$type = 'widget-new-grid';
+
+$mode = 'grid';
+$image = 'new_products_content_widget_grid';
+$title = __('See the list of campaign products');
+$items = $this->getProductCollection();
+$showWishlist = true;
+$showCompare = true;
+$showCart = true;
+$templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
+$description = false;
+if ($this->getProductCollection()->count() > 0 && $this->getIsValidCampaing()):
+
+?>
+    <div class="block widget">
+        <?= $this->getCampaign()->getDescription(); ?>
+    </div>
+     <div class="block widget block-new-products <?= /* @noEscape */ $mode ?>">
+         <div class="block-title">
+             <strong role="heading" aria-level="2"><?= $this->escapeHtml($title) ?></strong>
+         </div>
+         <div class="block-content">
+             <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+             <div class="products-<?= /* @noEscape */ $mode ?> <?= /* @noEscape */ $mode ?>">
+                 <ol class="product-items <?= /* @noEscape */ $type ?>">
+                     <?php foreach ($items as $_item) :?>
+                         <li class="product-item">
+                             <div class="product-item-info">
+                                 <a href="<?= $this->escapeUrl($this->blockList->getProductUrl($_item)) ?>"
+                                    class="product-item-photo">
+                                     <?= $this->blockList->getImage($_item, $image)->toHtml() ?>
+                                 </a>
+                                 <div class="product-item-details">
+                                     <strong class="product-item-name">
+                                         <a title="<?= $this->blockList->escapeHtml($_item->getName()) ?>"
+                                            href="<?= $this->blockList->escapeUrl($this->blockList->getProductUrl($_item)) ?>"
+                                            class="product-item-link">
+                                             <?= $this->blockList->escapeHtml($_item->getName()) ?>
+                                         </a>
+                                     </strong>
+                                     <?= $this->blockList->getProductPriceHtml($_item, $type); ?>
+
+                                     <?php if ($templateType) :?>
+                                         <?= $this->blockList->getReviewsSummaryHtml($_item, $templateType) ?>
+                                     <?php endif; ?>
+
+                                     <?php if ($showWishlist || $showCompare || $showCart) :?>
+                                         <div class="product-item-actions">
+                                             <?php if ($showCart) :?>
+                                                 <div class="actions-primary">
+                                                     <?php if ($_item->isSaleable()) :?>
+                                                         <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)) :?>
+                                                             <button class="action tocart primary"
+                                                                     data-mage-init='{"redirectUrl":{"url":"<?= $this->blockList->escapeUrl($this->blockList->getAddToCartUrl($_item)) ?>"}}'
+                                                                     type="button"
+                                                                     title="<?= $this->blockList->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                                 <span><?= $this->blockList->escapeHtml(__('Add to Cart')) ?></span>
+                                                             </button>
+                                                         <?php else :?>
+                                                             <?php
+                                                             $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
+                                                             $postData = $postDataHelper->getPostData(
+                                                                 $this->blockList->escapeUrl($this->blockList->getAddToCartUrl($_item)),
+                                                                 ['product' => (int) $_item->getEntityId()]
+                                                             )
+                                                             ?>
+                                                             <button class="action tocart primary"
+                                                                     data-post='<?= /* @noEscape */ $postData ?>'
+                                                                     type="button"
+                                                                     title="<?= $this->blockList->escapeHtmlAttr(__('Add to Cart')) ?>">
+                                                                 <span><?= $this->blockList->escapeHtml(__('Add to Cart')) ?></span>
+                                                             </button>
+                                                         <?php endif; ?>
+                                                     <?php else :?>
+                                                         <?php if ($_item->isAvailable()) :?>
+                                                             <div class="stock available">
+                                                                 <span><?= $this->blockList->escapeHtml(__('In stock')) ?></span>
+                                                             </div>
+                                                         <?php else :?>
+                                                             <div class="stock unavailable">
+                                                                 <span><?= $this->blockList->escapeHtml(__('Out of stock')) ?></span>
+                                                             </div>
+                                                         <?php endif; ?>
+                                                     <?php endif; ?>
+                                                 </div>
+                                             <?php endif; ?>
+                                             <?php if ($showWishlist || $showCompare) :?>
+                                                 <div class="actions-secondary" data-role="add-to-links">
+                                                     <?php if ($this->helper(Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist) :?>
+                                                         <a href="#"
+                                                            data-post='<?= /* @noEscape */ $this->blockList->getAddToWishlistParams($_item) ?>'
+                                                            class="action towishlist"
+                                                            data-action="add-to-wishlist"
+                                                            title="<?= $this->blockList->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                             <span><?= $this->blockList->escapeHtml(__('Add to Wish List')) ?></span>
+                                                         </a>
+                                                     <?php endif; ?>
+                                                     <?php if ($this->blockList->getAddToCompareUrl() && $showCompare) :?>
+                                                         <?php $compareHelper = $this->helper(Magento\Catalog\Helper\Product\Compare::class);?>
+                                                         <a href="#" class="action tocompare"
+                                                            data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>'
+                                                            title="<?= $this->blockList->escapeHtmlAttr(__('Add to Compare')) ?>">
+                                                             <span><?= $this->blockList->escapeHtml(__('Add to Compare')) ?></span>
+                                                         </a>
+                                                     <?php endif; ?>
+                                                 </div>
+                                             <?php endif; ?>
+                                         </div>
+                                     <?php endif; ?>
+                                 </div>
+                             </div>
+                         </li>
+                     <?php endforeach ?>
+                 </ol>
+             </div>
+             <?= $this->getPagerHtml() ?>
+         </div>
+     </div>
+<?php endif ?>

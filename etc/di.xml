@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Rocha\Impactcampaigns\Api\CampaignRepositoryInterface" type="Rocha\Impactcampaigns\Model\CampaignRepository"/>
+	<preference for="Rocha\Impactcampaigns\Api\Data\CampaignInterface" type="Rocha\Impactcampaigns\Model\Campaign"/>
+	<preference for="Rocha\Impactcampaigns\Api\Data\CampaignSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <virtualType name="Rocha\Impactcampaigns\Model\ResourceModel\Campaign\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">rocha_impactcampaigns_campaign</argument>
+			<argument name="resourceModel" xsi:type="string">Rocha\Impactcampaigns\Model\ResourceModel\Campaign\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="rocha_impactcampaigns_campaign_listing_data_source" xsi:type="string">Rocha\Impactcampaigns\Model\ResourceModel\Campaign\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+    <type name="Magento\Catalog\Block\Product\AbstractProduct">
+        <plugin name="Rocha_Impactcampaigns_Plugin_Magento_Catalog_Block_Product_AbstractProduct" type="Rocha\Impactcampaigns\Plugin\Magento\Catalog\Block\Product\AbstractProduct" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\Framework\View\Element\AbstractBlock">
+        <plugin name="Rocha_Impactcampaigns_Plugin_Magento_Framework_View_Element_AbstractBlock" type="Rocha\Impactcampaigns\Plugin\Magento\Framework\View\Element\AbstractBlock" sortOrder="10" disabled="false"/>
+    </type>
+</config>

@@ -1,0 +1,25 @@
+{
+    "name": "rocha/module-impactcampaigns",
+    "description": "Custom Campaign Product Listing Page",
+    "type": "magento2-module",
+    "license": "GPL-3.0-0",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Paulo Rocha",
+            "email": "cliquedesenvolvimento@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.1"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Rocha\\Impactcampaigns\\": ""
+        }
+    }
+}

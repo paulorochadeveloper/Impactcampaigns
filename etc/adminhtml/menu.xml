@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+		<add id="Rocha::top_level" title="Rocha" module="Rocha_Impactcampaigns" sortOrder="9999" resource="Magento_Backend::content"/>
+		<add id="Rocha_Impactcampaigns::rocha_impactcampaigns_campaign" title="Campaigns" module="Rocha_Impactcampaigns" sortOrder="9999" resource="Magento_Backend::content" parent="Rocha::top_level" action="rocha_impactcampaigns/campaign/index"/>
+	</menu>
+</config>
